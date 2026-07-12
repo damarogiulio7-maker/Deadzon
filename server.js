@@ -115,7 +115,7 @@ input:focus{border-color:#cc0000}
 </style>
 </head>
 <body>
-
+ 
 <!-- LOBBY -->
 <div id="lobby">
   <h1>DEAD ZONE</h1>
@@ -151,7 +151,7 @@ input:focus{border-color:#cc0000}
   </div>
   <div id="hint">WASD/FRECCE=muovi · MOUSE=mira · CLICK=spara · R=ricarica · Q=compra · F=raccogli · 1=reset · ESC=pausa · M=stereo</div>
 </div>
-
+ 
 <!-- OPTIONS MODAL -->
 <div class="modal" id="opt-modal">
   <div class="mbox">
@@ -176,7 +176,7 @@ input:focus{border-color:#cc0000}
     <button class="btn" onclick="hideModal('opt-modal')">CHIUDI</button>
   </div>
 </div>
-
+ 
 <!-- PAUSE MODAL -->
 <div class="modal" id="pause-modal">
   <div class="mbox" style="align-items:center">
@@ -187,7 +187,7 @@ input:focus{border-color:#cc0000}
     <button class="btn" style="width:210px;background:#4a0000;margin-top:4px" onclick="showModal('abandon-modal')">✕ ABBANDONA</button>
   </div>
 </div>
-
+ 
 <!-- ABANDON CONFIRM -->
 <div class="modal" id="abandon-modal">
   <div class="mbox" style="align-items:center">
@@ -199,7 +199,7 @@ input:focus{border-color:#cc0000}
     </div>
   </div>
 </div>
-
+ 
 <!-- STEREO -->
 <div id="stereo">
   <h4>🎵 STEREO <button onclick="toggleStereo()">✕</button></h4>
@@ -214,10 +214,10 @@ input:focus{border-color:#cc0000}
   <div id="st-list"></div>
   <label id="st-upload">+ AGGIUNGI MUSICA<input type="file" id="st-file" accept="audio/*" multiple></label>
 </div>
-
+ 
 <!-- CANVAS -->
 <canvas id="cv"></canvas>
-
+ 
 <!-- HUD -->
 <div id="hud">
   <div id="hud-top">
@@ -244,14 +244,14 @@ input:focus{border-color:#cc0000}
   <div id="dmg"></div>
   <div id="resp"><div id="resp-box"><p id="resp-p">SEI MORTO</p><small id="resp-s">Respawn tra 3s...</small></div></div>
 </div>
-
+ 
 <!-- GAME OVER -->
 <div id="go">
   <h1>GAME OVER</h1>
   <p id="go-w"></p><p id="go-p"></p>
   <button class="btn" style="width:200px;margin-top:8px" onclick="location.reload()">↺ RIGIOCA</button>
 </div>
-
+ 
 <!-- TOUCH -->
 <div id="touch">
   <div id="jlz">
@@ -269,7 +269,7 @@ input:focus{border-color:#cc0000}
     </div>
   </div>
 </div>
-
+ 
 <script>
 // ═══════════════════════════════════
 // CONSTANTS
@@ -285,7 +285,7 @@ const WEAPONS=[
   {name:'MINI UZI',damage:24,rpm:950,ammo:32,reserve:192,cost:500,bs:560,bsz:2.5},
 ];
 const WWALL=[{wi:1,tx:2,ty:10},{wi:2,tx:29,ty:10}];
-
+ 
 // ═══════════════════════════════════
 // MAP
 // ═══════════════════════════════════
@@ -316,7 +316,7 @@ const MAP=(()=>{
   });
   return m;
 })();
-
+ 
 // ═══════════════════════════════════
 // COLLISION
 // ═══════════════════════════════════
@@ -350,7 +350,7 @@ function zombieSpawn(){
   const d=DOOR_TILES[Math.floor(Math.random()*DOOR_TILES.length)];
   return{x:(d.x+.5)*TILE,y:(d.y+.5)*TILE};
 }
-
+ 
 // ═══════════════════════════════════
 // ENTITIES
 // ═══════════════════════════════════
@@ -372,7 +372,7 @@ function makeZombie(wave){
   return{x:sp.x,y:sp.y,hp,maxHp:hp,speed:55+wave*6,
     angle:0,alive:true,atkCD:0,flashT:0,wandA:Math.random()*Math.PI*2,wandT:0};
 }
-
+ 
 // ═══════════════════════════════════
 // SETTINGS
 // ═══════════════════════════════════
@@ -380,7 +380,7 @@ const S={masterVol:.8,musicVol:.6,sensitivity:5};
 document.getElementById('omv').oninput=function(){S.masterVol=this.value/100;document.getElementById('lmv').textContent=this.value;};
 document.getElementById('omm').oninput=function(){S.musicVol=this.value/100;document.getElementById('lmm').textContent=this.value;if(audio)audio.volume=S.musicVol;document.getElementById('st-vol').value=this.value;document.getElementById('st-vl').textContent=this.value;};
 document.getElementById('osens').oninput=function(){S.sensitivity=+this.value;document.getElementById('lsens').textContent=this.value;};
-
+ 
 // ═══════════════════════════════════
 // STEREO
 // ═══════════════════════════════════
@@ -417,13 +417,13 @@ document.getElementById('st-play').onclick=()=>{
 document.getElementById('st-next').onclick=()=>tracks.length&&playTrack((tIdx+1)%tracks.length);
 document.getElementById('st-prev').onclick=()=>tracks.length&&playTrack((tIdx-1+tracks.length)%tracks.length);
 document.getElementById('st-shuf').onclick=function(){shuf=!shuf;this.style.color=shuf?'#ffcc00':'#888';};
-
+ 
 // ═══════════════════════════════════
 // MODAL HELPERS
 // ═══════════════════════════════════
 function showModal(id){document.getElementById(id).style.display='flex';}
 function hideModal(id){document.getElementById(id).style.display='none';}
-
+ 
 // ═══════════════════════════════════
 // GAME STATE
 // ═══════════════════════════════════
@@ -435,12 +435,12 @@ const mctx=mm.getContext('2d');
 const keys={};
 let mx=0,my=0,mdown=false,camX=0,camY=0,lastT=0;
 let bloodPools=[],corpses=[];
-
+ 
 // Touch state
 const tMove={x:0,y:0};
 const tAim={angle:0,active:false};
 let tFire=false;
-
+ 
 function initGS(names){
   bloodPools=[];corpses=[];
   gs={players:names.map((n,i)=>makePlayer(i,n)),
@@ -449,7 +449,7 @@ function initGS(names){
     between:true,betTimer:5,tick:0,
     spawnQ:0,spawnT:0};
 }
-
+ 
 // ═══════════════════════════════════
 // DROPS
 // ═══════════════════════════════════
@@ -479,7 +479,7 @@ function applyDrop(p,d){
     }else{p.perk=d.perk;p.perkTimer=15;showMsg('PERK: '+d.label+'!');}
   }
 }
-
+ 
 // ═══════════════════════════════════
 // BLOOD & PARTICLES
 // ═══════════════════════════════════
@@ -490,7 +490,7 @@ function spawnBlood(x,y,n=5){
 function spawnExp(x,y){
   for(let i=0;i<14;i++){const a=Math.random()*Math.PI*2,s=70+Math.random()*130;gs.particles.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:.55,maxLife:.55,color:Math.random()<.5?'#ff4400':'#ffaa00',size:3+Math.random()*5});}
 }
-
+ 
 // ═══════════════════════════════════
 // ACTIONS
 // ═══════════════════════════════════
@@ -525,7 +525,7 @@ function resetPos(){
   p.x=sp.x;p.y=sp.y;if(!p.alive&&p.lives>0)respawn(p);
   showMsg('RESET POSIZIONE');
 }
-
+ 
 // ═══════════════════════════════════
 // MULTIPLAYER (WebSocket — vero online, via server su Render)
 // ═══════════════════════════════════
@@ -577,7 +577,7 @@ function handleWS(msg){
       break;
   }
 }
-
+ 
 // ═══════════════════════════════════
 // PROGRESS BAR
 // ═══════════════════════════════════
@@ -587,7 +587,7 @@ function progBar(lbl,ms,cb){
   const bar=document.getElementById('pb');bar.style.width='0%';
   let i=0;const t=setInterval(()=>{i++;bar.style.width=(i/50*100)+'%';if(i>=50){clearInterval(t);setTimeout(cb,120);}},ms/50);
 }
-
+ 
 // ═══════════════════════════════════
 // LOBBY BUTTONS
 // ═══════════════════════════════════
@@ -624,7 +624,7 @@ document.getElementById('bjoin').onclick=()=>{
   });
 };
 (()=>{const p=new URLSearchParams(location.search);const r=p.get('room');if(r){document.getElementById('jc').value=r.toUpperCase();document.getElementById('sj').textContent='Codice dal link: '+r.toUpperCase();document.getElementById('sj').className='st ok';}})();
-
+ 
 // ═══════════════════════════════════
 // BEGIN GAME
 // ═══════════════════════════════════
@@ -638,13 +638,13 @@ function beginGame(){
   lastT=performance.now();
   requestAnimationFrame(loop);
 }
-
+ 
 // ═══════════════════════════════════
 // PAUSE
 // ═══════════════════════════════════
 function pauseGame(){if(!gameRunning)return;gamePaused=true;gameRunning=false;showModal('pause-modal');}
 function resumeGame(){hideModal('pause-modal');gamePaused=false;gameRunning=true;lastT=performance.now();requestAnimationFrame(loop);}
-
+ 
 // ═══════════════════════════════════
 // INPUT
 // ═══════════════════════════════════
@@ -673,7 +673,7 @@ cv.addEventListener('mousemove',e=>{const r=cv.getBoundingClientRect();mx=e.clie
 cv.addEventListener('mousedown',e=>{if(e.button===0)mdown=true;});
 cv.addEventListener('mouseup',e=>{if(e.button===0)mdown=false;});
 window.addEventListener('resize',()=>{cv.width=window.innerWidth;cv.height=window.innerHeight;});
-
+ 
 // ═══════════════════════════════════
 // TOUCH
 // ═══════════════════════════════════
@@ -701,7 +701,7 @@ function initTouch(){
   document.getElementById('tbr').addEventListener('touchstart',e=>{e.preventDefault();if(gs&&gs.players[myIdx])doReload(gs.players[myIdx]);},{passive:false});
   document.getElementById('tbq').addEventListener('touchstart',e=>{e.preventDefault();if(gs&&gs.players[myIdx])tryBuy(gs.players[myIdx]);},{passive:false});
 }
-
+ 
 // ═══════════════════════════════════
 // UPDATE
 // ═══════════════════════════════════
@@ -709,14 +709,14 @@ function update(dt){
   if(!gs||!gameRunning)return;
   gs.tick++;
   const me=gs.players[myIdx];if(!me)return;
-
+ 
   if(me.perk){me.perkTimer-=dt;if(me.perkTimer<=0)me.perk=null;}
-
+ 
   // Respawn timers
   gs.players.forEach(p=>{
     if(p.isDead&&p.lives>0&&p.respTimer>0){p.respTimer-=dt;if(p.respTimer<=0)respawn(p);}
   });
-
+ 
   // Respawn overlay
   const ro=document.getElementById('resp');
   if(me.isDead&&me.lives>0){
@@ -724,7 +724,7 @@ function update(dt){
     document.getElementById('resp-p').textContent='SEI MORTO';
     document.getElementById('resp-s').textContent='Respawn tra '+Math.ceil(me.respTimer)+'s · Vite: '+me.lives+'/'+MAX_LIVES;
   }else ro.style.display='none';
-
+ 
   // Player movement
   if(me.alive){
     let dx=0,dy=0;
@@ -737,7 +737,7 @@ function update(dt){
     const spd=me.speed*(me.perk==='speed'?1.65:1);
     slide(me,dx*spd*dt,dy*spd*dt,11);
     me.angle=tAim.active?tAim.angle:Math.atan2((my+camY)-me.y,(mx+camX)-me.x);
-
+ 
     // Reload
     if(me.reloading){
       me.reloadPct+=dt/me.reloadDur;
@@ -747,7 +747,7 @@ function update(dt){
         me.clip+=take;me.reserve-=take;
       }
     }
-
+ 
     // Shoot
     const w=WEAPONS[me.wIdx];const now=performance.now();
     if((mdown||tFire)&&!me.reloading&&me.clip>0&&now-me.lastShot>60000/w.rpm){
@@ -758,15 +758,15 @@ function update(dt){
       gs.bullets.push({x:me.x,y:me.y,vx:Math.cos(ang)*w.bs,vy:Math.sin(ang)*w.bs,damage:dmg,owner:myIdx,alive:true,life:1.1,size:w.bsz,ang});
       if(me.clip===0&&me.reserve>0)doReload(me);
     }
-
+ 
     // Auto-pickup
     for(let i=gs.drops.length-1;i>=0;i--){
       if(Math.hypot(me.x-gs.drops[i].x,me.y-gs.drops[i].y)<TILE*.75){applyDrop(me,gs.drops[i]);gs.drops.splice(i,1);}
     }
-
+ 
     if(me.killStreak>=3){me.killStreak=0;me.hp=Math.min(me.maxHp,me.hp+20);showMsg('+20 HP KILL STREAK!');}
   }
-
+ 
   // Bullets
   gs.bullets.forEach(b=>{
     if(!b.alive)return;
@@ -788,19 +788,19 @@ function update(dt){
     }
   });
   gs.bullets=gs.bullets.filter(b=>b.alive);
-
+ 
   // Particles
   gs.particles.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.vx*=.82;p.vy*=.82;p.life-=dt;});
   gs.particles=gs.particles.filter(p=>p.life>0);
-
+ 
   // Drops
   gs.drops.forEach(d=>{d.bobT=(d.bobT||0)+dt;d.life-=dt;});
   gs.drops=gs.drops.filter(d=>d.life>0);
-
+ 
   // Corpses
   corpses.forEach(c=>{c.timer-=dt;c.alpha=Math.min(1,c.timer);});
   corpses=corpses.filter(c=>c.timer>0);
-
+ 
   // Zombies AI
   gs.zombies.forEach(z=>{
     if(!z.alive)return;
@@ -819,7 +819,7 @@ function update(dt){
     z.atkCD-=dt;
     if(minD<20&&z.atkCD<=0){target.hp-=20;z.atkCD=.85;flashDmg();if(target.hp<=0)killPlayer(target);}
   });
-
+ 
   // Wave logic
   if(gs.between){
     gs.betTimer-=dt;
@@ -840,21 +840,21 @@ function update(dt){
     gs.players.forEach(p=>{if(!p.alive)return;const w=WEAPONS[p.wIdx];p.reserve=Math.min(p.reserve+Math.floor(w.reserve*.25),w.reserve);});
     showAnn('WAVE '+(gs.wave-1)+' COMPLETATA!<br><small style="font-size:15px">Prossima in 5s...</small>');
   }
-
+ 
   if(gs.players.length>0&&gs.players.every(p=>!p.alive&&p.lives<=0))endGame();
-
+ 
   if(me.alive){
     camX=Math.max(0,Math.min(me.x-cv.width/2,MW-cv.width));
     camY=Math.max(0,Math.min(me.y-cv.height/2,MH-cv.height));
   }
-
+ 
   if(!isSolo&&ws){
     if(isHost)wsend({type:'state',state:gs});
     else wsend({type:'playerUpdate',idx:myIdx,player:gs.players[myIdx]});
   }
   updateHUD();
 }
-
+ 
 // ═══════════════════════════════════
 // DRAW
 // ═══════════════════════════════════
@@ -863,7 +863,7 @@ function draw(){
   ctx.fillStyle='#080808';ctx.fillRect(0,0,cv.width,cv.height);
   if(!gs)return;
   ctx.save();ctx.translate(-camX,-camY);
-
+ 
   // Floor & walls
   for(let r=0;r<ROWS;r++){
     for(let c=0;c<COLS;c++){
@@ -882,10 +882,10 @@ function draw(){
       }
     }
   }
-
+ 
   // Border glow
   ctx.strokeStyle='rgba(150,0,0,.12)';ctx.lineWidth=4;ctx.strokeRect(2,2,MW-4,MH-4);
-
+ 
   // Blood pools
   bloodPools.forEach(b=>{
     ctx.globalAlpha=b.a*.85;
@@ -893,7 +893,7 @@ function draw(){
     ctx.fillStyle='#330000';ctx.beginPath();ctx.ellipse(b.x,b.y,b.r*.5,b.r*.3,0,0,Math.PI*2);ctx.fill();
     ctx.globalAlpha=1;
   });
-
+ 
   // Weapon mounts
   WWALL.forEach(wp=>{
     const w=WEAPONS[wp.wi];const x=wp.tx*TILE,y=wp.ty*TILE;
@@ -902,7 +902,7 @@ function draw(){
     ctx.fillStyle='#ff8800';ctx.font='bold 8px Courier New';ctx.textAlign='center';ctx.fillText(w.name,x+TILE/2,y+TILE/2-5);
     ctx.fillStyle='#ffcc00';ctx.font='7px Courier New';ctx.fillText(w.cost+' pts [Q]',x+TILE/2,y+TILE/2+6);
   });
-
+ 
   // Drops
   gs.drops.forEach(d=>{
     const bob=Math.sin((d.bobT||0)*4)*3;
@@ -940,7 +940,7 @@ function draw(){
     }
     ctx.restore();
   });
-
+ 
   // Corpses
   corpses.forEach(c=>{
     ctx.save();ctx.translate(c.x,c.y);ctx.rotate(c.angle+Math.PI/2);
@@ -948,10 +948,10 @@ function draw(){
     ctx.fillStyle='#1a3a0a';ctx.beginPath();ctx.ellipse(0,0,13,7,0,0,Math.PI*2);ctx.fill();
     ctx.globalAlpha=1;ctx.restore();
   });
-
+ 
   // Particles
   gs.particles.forEach(p=>{ctx.globalAlpha=p.life/p.maxLife;ctx.fillStyle=p.color;ctx.beginPath();ctx.arc(p.x,p.y,p.size*(p.life/p.maxLife),0,Math.PI*2);ctx.fill();});ctx.globalAlpha=1;
-
+ 
   // Zombies
   gs.zombies.forEach(z=>{
     if(!z.alive)return;
@@ -963,7 +963,7 @@ function draw(){
     ctx.restore();
     const bw=26;ctx.fillStyle='#400';ctx.fillRect(z.x-bw/2,z.y-22,bw,3);ctx.fillStyle='#f00';ctx.fillRect(z.x-bw/2,z.y-22,bw*(z.hp/z.maxHp),3);
   });
-
+ 
   // Bullets
   gs.bullets.forEach(b=>{
     const tr=10,tx=b.x-Math.cos(b.ang||0)*tr,ty=b.y-Math.sin(b.ang||0)*tr;
@@ -972,7 +972,7 @@ function draw(){
     ctx.strokeStyle=g;ctx.lineWidth=(b.size||3)+1;ctx.beginPath();ctx.moveTo(tx,ty);ctx.lineTo(b.x,b.y);ctx.stroke();
     ctx.fillStyle='#fffde0';ctx.beginPath();ctx.arc(b.x,b.y,(b.size||3)+1,0,Math.PI*2);ctx.fill();
   });
-
+ 
   // Players
   gs.players.forEach((p,i)=>{
     if(!p.alive)return;
@@ -987,11 +987,11 @@ function draw(){
     ctx.fillStyle=col;ctx.font='bold 9px Courier New';ctx.textAlign='center';ctx.fillText(p.name,p.x,p.y-26);
     for(let l=0;l<MAX_LIVES;l++){ctx.fillStyle=l<p.lives?col:'#222';ctx.beginPath();ctx.arc(p.x-8+l*8,p.y-33,2.5,0,Math.PI*2);ctx.fill();}
   });
-
+ 
   ctx.restore();
   drawMM();
 }
-
+ 
 function drawMM(){
   const mw=150,mh=150,sx=mw/MW,sy=mh/MH;
   mctx.fillStyle='rgba(0,0,0,.9)';mctx.fillRect(0,0,mw,mh);
@@ -1009,7 +1009,7 @@ function drawMM(){
   });
   mctx.strokeStyle='#222';mctx.lineWidth=1;mctx.strokeRect(0,0,mw,mh);
 }
-
+ 
 // ═══════════════════════════════════
 // HUD
 // ═══════════════════════════════════
@@ -1033,26 +1033,26 @@ function updateHUD(){
   else pd.textContent='';
   document.getElementById('lives').textContent='VITE: '+'♥ '.repeat(me.lives)+'♡ '.repeat(Math.max(0,MAX_LIVES-me.lives));
 }
-
+ 
 const KF=[];
 function addKF(n){KF.push({n,t:4});if(KF.length>5)KF.shift();document.getElementById('kf').innerHTML=KF.map(k=>`<div class="kfi">${k.n} +45</div>`).join('');}
 function tickKF(dt){KF.forEach(k=>k.t-=dt);while(KF.length&&KF[0].t<=0)KF.shift();}
-
+ 
 let dmgT=0;
 function flashDmg(){dmgT=.15;}
 function tickDmg(dt){dmgT-=dt;document.getElementById('dmg').style.borderColor=dmgT>0?'rgba(200,0,0,.7)':'transparent';}
-
+ 
 let annTid=null,msgTid=null;
 function showAnn(t){const el=document.getElementById('ann');el.innerHTML=t;el.style.display='block';if(annTid)clearTimeout(annTid);annTid=setTimeout(()=>el.style.display='none',2800);}
 function showMsg(t){const el=document.getElementById('msg');el.textContent=t;el.style.display='block';if(msgTid)clearTimeout(msgTid);msgTid=setTimeout(()=>el.style.display='none',2000);}
-
+ 
 function endGame(){
   gameRunning=false;
   document.getElementById('go-w').textContent='Hai resistito fino alla WAVE '+gs.wave;
   document.getElementById('go-p').textContent='Punti totali: '+gs.players.reduce((a,p)=>a+p.points,0);
   document.getElementById('go').style.display='flex';
 }
-
+ 
 // ═══════════════════════════════════
 // LOOP
 // ═══════════════════════════════════
